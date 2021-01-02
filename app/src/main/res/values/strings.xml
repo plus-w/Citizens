@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name_en">Citizens</string>
+    <string name="app_name_zh">城民</string>
+    <string name="search_zh">搜索</string>
+    <string name="search_hint_zh">输入搜索内容</string>
+    <string name="bottom_tab_news">新闻</string>
+    <string name="bottom_tab_match">赛况</string>
+    <string name="bottom_tab_data">数据</string>
+    <string name="bottom_tab_info">资料</string>
+    <string name="refresh">刷新</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

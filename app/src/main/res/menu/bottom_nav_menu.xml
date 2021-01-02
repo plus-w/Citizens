@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_news"
+        android:enabled="true"
+        android:checkable="true"
+        android:icon="@drawable/ic_news"
+        android:title="@string/bottom_tab_news"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_match"
+        android:enabled="true"
+        android:checkable="true"
+        android:icon="@drawable/ic_match"
+        android:title="@string/bottom_tab_match"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_data"
+        android:enabled="true"
+        android:checkable="true"
+        android:icon="@drawable/ic_data"
+        android:title="@string/bottom_tab_data"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_info"
+        android:enabled="true"
+        android:checkable="true"
+        android:icon="@drawable/ic_info"
+        android:title="@string/bottom_tab_info"
+        app:showAsAction="ifRoom"/>
+</menu>
