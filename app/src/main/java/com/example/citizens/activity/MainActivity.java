@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,11 +20,12 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.citizens.R;
 import com.example.citizens.adapter.ViewPagerAdapter;
+import com.example.citizens.fragment.DataFragment;
+import com.example.citizens.fragment.InfoFragment;
 import com.example.citizens.fragment.MatchFragment;
 import com.example.citizens.fragment.NewsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -30,16 +33,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    final private NewsFragment mNewsFragment = NewsFragment.newInstance("新闻");
-    final private MatchFragment mMatchFragment = MatchFragment.newInstance("赛况");
-    final private MatchFragment mDataFragment = MatchFragment.newInstance("数据");
-    final private MatchFragment mInfoFragment = MatchFragment.newInstance("资料");
+    final private NewsFragment mNewsFragment = NewsFragment.newInstance();
+    final private MatchFragment mMatchFragment = MatchFragment.newInstance();
+    final private DataFragment mDataFragment = DataFragment.newInstance();
+    final private InfoFragment mInfoFragment = InfoFragment.newInstance();
     final private FragmentManager mFragmentManager = getSupportFragmentManager();
     private FloatingActionButton mFAB;
     private BottomNavigationView mBottomNavigationView;
     private ViewPager mViewPager;
 
     MenuItem mPrevMenuItem;
+    Integer currentPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         mBottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         mViewPager = findViewById(R.id.view_pager);
+        mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
@@ -65,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     mBottomNavigationView.getMenu().getItem(0).setChecked(false);
                 }
                 mBottomNavigationView.getMenu().getItem(position).setChecked(true);
+                currentPosition = position;
                 mPrevMenuItem = mBottomNavigationView.getMenu().getItem(position);
-
             }
 
             @Override
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         viewpagerAdapter.addFragment(mMatchFragment);
         viewpagerAdapter.addFragment(mDataFragment);
         viewpagerAdapter.addFragment(mInfoFragment);
-        mViewPager.setAdapter(viewpagerAdapter);
+
 
         mFAB = findViewById(R.id.fab_refresh);
         mFAB.setOnClickListener(new FloatingActionButton.OnClickListener(){
@@ -90,12 +95,52 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         Animation.RELATIVE_TO_SELF, 0.5f);
 
                 rotateAnimation.setInterpolator(new LinearInterpolator());
-                rotateAnimation.setDuration(500);
-                rotateAnimation.setRepeatCount(2);
+                rotateAnimation.setDuration(100);
+                rotateAnimation.setRepeatCount(3);
 
                 findViewById(R.id.fab_refresh).startAnimation(rotateAnimation);
+
+                Fragment fragment = viewpagerAdapter.getItem(mViewPager.getCurrentItem());
+
+                if (fragment instanceof NewsFragment) {
+                    mNewsFragment.getNewsRecyclerViewAdapter().updateData();
+                    mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(true);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+//                        if(mSwipeRefreshLayoutNews.isRefreshing()) {
+                            mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(false);
+//                        }
+                        }
+                    }, 1000);
+                    mNewsFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mNewsFragment.getRecyclerView(), null, 0);
+                } else if (fragment instanceof MatchFragment) {
+                    mMatchFragment.getMatchRecyclerViewAdapter().updateData();
+                    mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(true);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+//                        if(mSwipeRefreshLayoutNews.isRefreshing()) {
+                            mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(false);
+//                        }
+                        }
+                    }, 1000);
+                    mMatchFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mMatchFragment.getRecyclerView(), null, 0);
+                } else {
+//                    RotateAnimation rotateAnimation = new RotateAnimation(0, 360f,
+//                            Animation.RELATIVE_TO_SELF, 0.5f,
+//                            Animation.RELATIVE_TO_SELF, 0.5f);
+//                    rotateAnimation.setInterpolator(new LinearInterpolator());
+//                    rotateAnimation.setDuration(100);
+//                    rotateAnimation.setRepeatCount(3);
+//                    findViewById(R.id.fab_refresh).startAnimation(rotateAnimation);
+                }
+
             }
         });
+        mViewPager.setAdapter(viewpagerAdapter);
     }
 
     @Override
@@ -165,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 mViewPager.setCurrentItem(3, false);
                 break;
         }
-        return true;
+        return false;
     }
 
 //    @Override

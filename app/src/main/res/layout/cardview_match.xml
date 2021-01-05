@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_view_match"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginLeft="6dp"
+    android:layout_marginRight="6dp"
+    android:layout_marginTop="8dp"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="4dp">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_view_match_type"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="12dp"
+                android:padding="0dp"
+                android:src="@drawable/manchester_city_fc_badge" />
+
+            <TextView
+                android:id="@+id/text_view_match_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:padding="4dp"
+                android:text="英超"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/text_view_match_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="12dp"
+                android:text="2021年1月4日" />
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/text_view_match_inner_sep"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/sky_blue"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image_view_home_team_logo"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/manchester_city_fc_badge"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8" />
+                <TextView
+                    android:id="@+id/text_view_home_team_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="切尔西"
+                    android:textSize="12sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_below="@id/image_view_home_team_logo"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/image_view_away_team_logo"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:src="@drawable/manchester_city_fc_badge"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"/>
+
+                <TextView
+                    android:id="@+id/text_view_away_team_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="曼城"
+                    android:textSize="12sp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_below="@id/image_view_away_team_logo"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="0dp"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <TextView
+                android:id="@+id/text_view_home_team_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="36sp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/score_sep"/>
+            <TextView
+                android:id="@+id/score_sep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:textSize="36sp"
+                android:gravity="center"
+                android:layout_centerInParent="true"/>
+            <TextView
+                android:id="@+id/text_view_away_team_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:textAlignment="center"
+                android:textSize="36sp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/score_sep"/>
+
+            <TextView
+                android:id="@+id/text_view_match_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:30"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/score_sep"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="0dp"/>
+
+            <TextView
+                android:id="@+id/text_view_match_weekday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:text="星期一" />
+
+        </RelativeLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.cardview.widget.CardView>
