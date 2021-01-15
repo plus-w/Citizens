@@ -1,5 +1,6 @@
 package com.example.citizens.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import com.example.citizens.R;
 import com.example.citizens.adapter.NewsRecyclerViewAdapter;
 import com.example.citizens.viewmodel.NewsViewModel;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +41,8 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
     private RecyclerView recyclerView;
     private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
-    private SwipeRefreshLayout swipeRefreshLayoutNews;
+//    private SwipeRefreshLayout swipeRefreshLayoutNews;
+    private SwipyRefreshLayout swipeRefreshLayoutNews;
 
     public RecyclerView getRecyclerView() {
         return recyclerView;
@@ -51,7 +56,7 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
         return recyclerViewLayoutManager;
     }
 
-    public SwipeRefreshLayout getSwipeRefreshLayoutNews() {
+    public SwipyRefreshLayout getSwipeRefreshLayoutNews() {
         return swipeRefreshLayoutNews;
     }
 
@@ -104,23 +109,23 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_news);
 //        mRecyclerView.setHasFixedSize(true);  // fix item size to improve performance
 
-        swipeRefreshLayoutNews = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_news);
-        swipeRefreshLayoutNews.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayoutNews = (SwipyRefreshLayout) view.findViewById(R.id.swiperefresh_news);
+        swipeRefreshLayoutNews.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                newsRecyclerViewAdapter.updateData();
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                swipeRefreshLayoutNews.setRefreshing(true);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-//                        if(mSwipeRefreshLayoutNews.isRefreshing()) {
+                        newsRecyclerViewAdapter.updateData(direction);
+                        if(swipeRefreshLayoutNews.isRefreshing()) {
                             swipeRefreshLayoutNews.setRefreshing(false);
-//                        }
+                        }
                     }
                 }, 1000);
             }
         });
-
 
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
         recyclerView.setAdapter(newsRecyclerViewAdapter);

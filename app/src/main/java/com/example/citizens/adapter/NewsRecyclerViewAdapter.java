@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.citizens.R;
 import com.example.citizens.viewmodel.NewsViewModel;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.List;
 
@@ -59,9 +60,15 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
         return newsList;
     }
 
-    public void updateData() {
-        NewsViewModel newsViewModel = new NewsViewModel("新闻-" + (newsList.size() + 1), null, "");
-        newsList.add(0, newsViewModel);
+    public void updateData(SwipyRefreshLayoutDirection direction) {
+        if (direction == SwipyRefreshLayoutDirection.TOP) {
+            NewsViewModel newsViewModel = new NewsViewModel("新闻-" + (newsList.size() + 1), null, "");
+            newsList.add(0, newsViewModel);
+        } else {
+            NewsViewModel newsViewModel = new NewsViewModel("新闻-" + "0", null, "");
+            newsList.add(newsList.size(), newsViewModel);
+        }
+
         this.notifyDataSetChanged();
     }
 

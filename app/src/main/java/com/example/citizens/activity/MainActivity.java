@@ -30,6 +30,7 @@ import com.example.citizens.fragment.MatchFragment;
 import com.example.citizens.fragment.NewsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -103,28 +104,28 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Fragment fragment = viewpagerAdapter.getItem(mViewPager.getCurrentItem());
 
                 if (fragment instanceof NewsFragment) {
-                    mNewsFragment.getNewsRecyclerViewAdapter().updateData();
                     mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(true);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-//                        if(mSwipeRefreshLayoutNews.isRefreshing()) {
-                            mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(false);
-//                        }
+                            mNewsFragment.getNewsRecyclerViewAdapter().updateData(SwipyRefreshLayoutDirection.TOP);
+                            if(mNewsFragment.getSwipeRefreshLayoutNews().isRefreshing()) {
+                                mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(false);
+                            }
                         }
                     }, 1000);
                     mNewsFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mNewsFragment.getRecyclerView(), null, 0);
                 } else if (fragment instanceof MatchFragment) {
-                    mMatchFragment.getMatchRecyclerViewAdapter().updateData();
                     mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(true);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-//                        if(mSwipeRefreshLayoutNews.isRefreshing()) {
-                            mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(false);
-//                        }
+                            mMatchFragment.getMatchRecyclerViewAdapter().updateData(SwipyRefreshLayoutDirection.TOP);
+                            if( mMatchFragment.getSwipeRefreshLayoutMatch().isRefreshing()) {
+                                mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(false);
+                            }
                         }
                     }, 1000);
                     mMatchFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mMatchFragment.getRecyclerView(), null, 0);

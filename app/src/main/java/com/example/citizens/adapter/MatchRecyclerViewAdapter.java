@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.citizens.R;
 import com.example.citizens.viewmodel.MatchViewModel;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.List;
 
@@ -90,11 +91,19 @@ public class MatchRecyclerViewAdapter extends RecyclerView.Adapter<MatchRecycler
         return matchList;
     }
 
-    public void updateData() {
-        MatchViewModel matchViewModel = new MatchViewModel("英超", "2021年1月4日",
-                "星期一", "00:30","切尔西","曼城",
-                "0", "3");
-        matchList.add(0, matchViewModel);
+    public void updateData(SwipyRefreshLayoutDirection direction) {
+        if (direction == SwipyRefreshLayoutDirection.TOP) {
+            MatchViewModel matchViewModel = new MatchViewModel("英超", "2021年1月4日",
+                    "星期一", "00:30","切尔西","曼城",
+                    "0", "3");
+            matchList.add(0, matchViewModel);
+        } else {    // "up"
+            MatchViewModel matchViewModel = new MatchViewModel("英超", "2021年1月4日",
+                    "星期一", "00:30","切尔西","曼城",
+                    "0", "3");
+            matchList.add(matchList.size(), matchViewModel);
+        }
+
         this.notifyDataSetChanged();
     }
 

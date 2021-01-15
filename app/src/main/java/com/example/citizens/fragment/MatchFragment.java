@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.example.citizens.R;
 import com.example.citizens.adapter.MatchRecyclerViewAdapter;
 import com.example.citizens.viewmodel.MatchViewModel;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +41,8 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
     private RecyclerView recyclerView;
     private MatchRecyclerViewAdapter matchRecyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
-    private SwipeRefreshLayout swipeRefreshLayoutMatch;
+//    private SwipeRefreshLayout  swipeRefreshLayoutMatch;
+    private SwipyRefreshLayout swipeRefreshLayoutMatch;
 
     public MatchFragment() {
         // Required empty public constructor
@@ -82,16 +85,19 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
         View view = inflater.inflate(R.layout.fragment_match, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_match);
 
-        swipeRefreshLayoutMatch = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh_match);
-        swipeRefreshLayoutMatch.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayoutMatch = (SwipyRefreshLayout) view.findViewById(R.id.swiperefresh_match);
+        swipeRefreshLayoutMatch.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                matchRecyclerViewAdapter.updateData();
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                swipeRefreshLayoutMatch.setRefreshing(true);
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        swipeRefreshLayoutMatch.setRefreshing(false);
+                        matchRecyclerViewAdapter.updateData(direction);
+                        if(swipeRefreshLayoutMatch.isRefreshing()) {
+                            swipeRefreshLayoutMatch.setRefreshing(false);
+                        }
                     }
                 }, 1000);
             }
@@ -125,7 +131,7 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
         return recyclerViewLayoutManager;
     }
 
-    public SwipeRefreshLayout getSwipeRefreshLayoutMatch() {
+    public SwipyRefreshLayout getSwipeRefreshLayoutMatch() {
         return swipeRefreshLayoutMatch;
     }
 }
