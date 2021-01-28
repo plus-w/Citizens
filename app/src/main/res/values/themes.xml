@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/sky_blue</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/blue</item>
         <item name="rippleColor">@color/sky_blue</item>
         <item name="itemRippleColor">@color/sky_blue</item>
         <item name="tabRippleColor">@color/sky_blue</item>
@@ -15,6 +15,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/blue</item>
         <!-- Customize your theme here. -->
+        <item name="android:navigationBarColor">@color/blue</item>
         <item name="android:textColor">@color/blue</item>
     </style>
 </resources>

@@ -1,6 +1,8 @@
 package com.example.citizens.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.citizens.R;
+import com.example.citizens.activity.NewsWebViewActivity;
 import com.example.citizens.adapter.NewsRecyclerViewAdapter;
 import com.example.citizens.viewmodel.NewsViewModel;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
@@ -110,6 +113,7 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
 //        mRecyclerView.setHasFixedSize(true);  // fix item size to improve performance
 
         swipeRefreshLayoutNews = (SwipyRefreshLayout) view.findViewById(R.id.swiperefresh_news);
+        swipeRefreshLayoutNews.setColorSchemeResources(R.color.blue, R.color.sky_blue);
         swipeRefreshLayoutNews.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
@@ -140,6 +144,9 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), newsRecyclerViewAdapter.getItem(position).getTitle() + " Clicked", Toast.LENGTH_SHORT).show();
+        Intent newsIntent = new Intent(getActivity(), NewsWebViewActivity.class);
+        newsIntent.putExtra("URL", "https://m.zhibo8.cc/news/web/zuqiu/2021-01-27/601079e34755d.htm");
+        startActivity(newsIntent);
+//        Toast.makeText(getActivity(), newsRecyclerViewAdapter.getItem(position).getTitle() + " Clicked", Toast.LENGTH_SHORT).show();
     }
 }
