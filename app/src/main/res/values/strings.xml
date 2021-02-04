@@ -10,4 +10,13 @@
     <string name="refresh">刷新</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="epl">英超</string>
+    <string name="ucl">欧冠</string>
+    <string name="fa">足总杯</string>
+    <string name="efl">联赛杯</string>
+    <string name="radio_overview_data">总览</string>
+    <string name="radio_epl_data">英超</string>
+    <string name="radio_ucl_data">欧冠</string>
+    <string name="radio_fa_data">足总杯</string>
+    <string name="radio_efl_data">联赛杯</string>
 </resources>

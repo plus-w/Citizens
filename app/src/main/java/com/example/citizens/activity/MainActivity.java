@@ -23,22 +23,25 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.citizens.R;
+import com.example.citizens.adapter.NewsRecyclerViewAdapter;
 import com.example.citizens.adapter.ViewPagerAdapter;
 import com.example.citizens.fragment.DataFragment;
 import com.example.citizens.fragment.InfoFragment;
 import com.example.citizens.fragment.MatchFragment;
 import com.example.citizens.fragment.NewsFragment;
+import com.example.citizens.utils.NetworkPort;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
+    final private FragmentManager mFragmentManager = getSupportFragmentManager();
     final private NewsFragment mNewsFragment = NewsFragment.newInstance();
     final private MatchFragment mMatchFragment = MatchFragment.newInstance();
-    final private DataFragment mDataFragment = DataFragment.newInstance();
+    final private DataFragment mDataFragment = DataFragment.newInstance(mFragmentManager);
     final private InfoFragment mInfoFragment = InfoFragment.newInstance();
-    final private FragmentManager mFragmentManager = getSupportFragmentManager();
+
     private FloatingActionButton mFAB;
     private BottomNavigationView mBottomNavigationView;
     private ViewPager mViewPager;
@@ -100,21 +103,33 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 rotateAnimation.setRepeatCount(3);
 
                 findViewById(R.id.fab_refresh).startAnimation(rotateAnimation);
+//                rotateAnimation.cancel();
+//                rotateAnimation.reset();
 
                 Fragment fragment = viewpagerAdapter.getItem(mViewPager.getCurrentItem());
 
                 if (fragment instanceof NewsFragment) {
                     mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(true);
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mNewsFragment.getNewsRecyclerViewAdapter().updateData(SwipyRefreshLayoutDirection.TOP);
-                            if(mNewsFragment.getSwipeRefreshLayoutNews().isRefreshing()) {
-                                mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(false);
-                            }
-                        }
-                    }, 1000);
+
+                    NewsRecyclerViewAdapter newsRecyclerViewAdapter = mNewsFragment.getNewsRecyclerViewAdapter();
+                    NetworkPort.getInstance().getNews(getApplicationContext(), newsRecyclerViewAdapter, mNewsFragment.getSwipeRefreshLayoutNews(), null);
+
+//                    final Handler handler = new Handler();
+//                    handler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+////                          newsRecyclerViewAdapter.updateData(direction, getActivity().getApplicationContext());
+////                            if(swipeRefreshLayoutNews.isRefreshing()) {
+////                                swipeRefreshLayoutNews.setRefreshing(false);
+////                            }
+////                            .updateData(SwipyRefreshLayoutDirection.TOP, getApplicationContext());
+//                            if(mNewsFragment.getSwipeRefreshLayoutNews().isRefreshing()) {
+//                                mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(false);
+//                            }
+//                            newsRecyclerViewAdapter.notifyDataSetChanged();
+//                        }
+//                    }, 1000);
                     mNewsFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mNewsFragment.getRecyclerView(), null, 0);
                 } else if (fragment instanceof MatchFragment) {
                     mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(true);
@@ -149,37 +164,39 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setQueryHint(getString(R.string.search_hint_zh));
-        ImageView icon = searchView.findViewById(androidx.appcompat.R.id.search_button);
-        icon.setImageResource(R.drawable.baseline_search_white_24);
-//        icon.setColorFilter(getColor(R.color.blue));
-        searchView.setOnSearchClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Search", Toast.LENGTH_SHORT).show();
-            }
-        });
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                Toast.makeText(MainActivity.this, "Close search", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                System.out.println("Query text finish: " + query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                System.out.println("Query text change:" + newText);
-                return false;
-            }
-        });
-        return true;
+        searchView.invalidate();
+        return false;
+//        searchView.setQueryHint(getString(R.string.search_hint_zh));
+//        ImageView icon = searchView.findViewById(androidx.appcompat.R.id.search_button);
+//        icon.setImageResource(R.drawable.baseline_search_white_24);
+////        icon.setColorFilter(getColor(R.color.blue));
+//        searchView.setOnSearchClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(MainActivity.this, "Search", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+//            @Override
+//            public boolean onClose() {
+//                Toast.makeText(MainActivity.this, "Close search", Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                System.out.println("Query text finish: " + query);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                System.out.println("Query text change:" + newText);
+//                return false;
+//            }
+//        });
+//        return true;
     }
 
     @Override

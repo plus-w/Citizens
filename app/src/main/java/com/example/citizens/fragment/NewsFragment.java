@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.citizens.R;
 import com.example.citizens.activity.NewsWebViewActivity;
 import com.example.citizens.adapter.NewsRecyclerViewAdapter;
+import com.example.citizens.utils.NetworkPort;
 import com.example.citizens.viewmodel.NewsViewModel;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
@@ -99,7 +100,7 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
 //            data.add(newsViewModel);
 //        }
 
-        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(data);
+        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getContext(), data);
         newsRecyclerViewAdapter.setClickListener(this);
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
     }
@@ -118,16 +119,29 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 swipeRefreshLayoutNews.setRefreshing(true);
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        newsRecyclerViewAdapter.updateData(direction);
-                        if(swipeRefreshLayoutNews.isRefreshing()) {
-                            swipeRefreshLayoutNews.setRefreshing(false);
-                        }
-                    }
-                }, 1000);
+                String date = null;
+                if (direction == SwipyRefreshLayoutDirection.BOTTOM && newsRecyclerViewAdapter.getItemCount() > 0) {
+                    date = newsRecyclerViewAdapter.getItem(newsRecyclerViewAdapter.getItemCount() - 1).getDate();
+                }
+                NetworkPort.getInstance().getNews(
+                        getActivity().getApplicationContext(),
+                        newsRecyclerViewAdapter,
+                        swipeRefreshLayoutNews,
+                        date);
+
+//                final Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        NetworkPort.getInstance().getNews(getActivity().getApplicationContext(), newsRecyclerViewAdapter);
+////                        newsRecyclerViewAdapter.updateData(direction, getActivity().getApplicationContext());
+//                        if(swipeRefreshLayoutNews.isRefreshing()) {
+//                            swipeRefreshLayoutNews.setRefreshing(false);
+//                        }
+//                        newsRecyclerViewAdapter.notifyDataSetChanged();
+//                    }
+//                }, 1000);
+
             }
         });
 
@@ -145,7 +159,7 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
     @Override
     public void onItemClick(View view, int position) {
         Intent newsIntent = new Intent(getActivity(), NewsWebViewActivity.class);
-        newsIntent.putExtra("URL", "https://m.zhibo8.cc/news/web/zuqiu/2021-01-27/601079e34755d.htm");
+        newsIntent.putExtra("URL", newsRecyclerViewAdapter.getItem(position).getNewsURL());
         startActivity(newsIntent);
 //        Toast.makeText(getActivity(), newsRecyclerViewAdapter.getItem(position).getTitle() + " Clicked", Toast.LENGTH_SHORT).show();
     }

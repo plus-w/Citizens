@@ -1,16 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.DataFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/fragment_data_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/bottom_tab_data"
-        android:layout_gravity="center_vertical|center_horizontal"/>
+    <RadioGroup
+        android:id="@+id/radio_group_data"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:background="@color/light_gold"
+        android:orientation="vertical"
+        android:weightSum="10"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/view_pager_data">
 
-</FrameLayout>
+        <RadioButton
+            android:id="@+id/radio_button_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/radio_overview_data"
+            android:textColor="@drawable/radio_button_data" />
+
+        <RadioButton
+            android:id="@+id/radio_button_epl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/radio_epl_data"
+            android:textColor="@drawable/radio_button_data" />
+
+        <RadioButton
+            android:id="@+id/radio_button_ucl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/radio_ucl_data"
+            android:textColor="@drawable/radio_button_data" />
+
+        <RadioButton
+            android:id="@+id/radio_button_fa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/radio_fa_data"
+            android:textColor="@drawable/radio_button_data" />
+
+        <RadioButton
+            android:id="@+id/radio_button_efl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:button="@null"
+            android:gravity="center"
+            android:text="@string/radio_efl_data"
+            android:textColor="@drawable/radio_button_data" />
+
+    </RadioGroup>
+
+    <com.example.citizens.utils.MyViewPager
+        android:id="@+id/view_pager_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/radio_group_data"
+        app:layout_constraintRight_toRightOf="parent" />
+</LinearLayout>

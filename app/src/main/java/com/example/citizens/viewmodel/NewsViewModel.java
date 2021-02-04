@@ -2,15 +2,44 @@ package com.example.citizens.viewmodel;
 
 import android.media.Image;
 
-public class NewsViewModel {
-    private String title;
-    private Image cover;
-    private String URL;
+import androidx.annotation.Nullable;
 
-    public NewsViewModel(String title, Image cover, String URL) {
+public class NewsViewModel {
+    private String index;
+    private String title;
+    private String coverURL;
+    private String newsURL;
+    private String date;
+
+    public NewsViewModel(String index, String title, String coverURL, String newsURL, String date) {
+        this.index = index;
         this.title = title;
-        this.cover = cover;
-        this.URL = URL;
+        this.coverURL = coverURL;
+        this.newsURL = newsURL;
+        this.date = date;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return index.hashCode();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof NewsViewModel)) {
+            return false;
+        }
+        NewsViewModel rhs = (NewsViewModel) obj;
+        return this.index.equals(rhs.index);
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getIndex() {
+        return index;
     }
 
     public String getTitle() {
@@ -21,19 +50,19 @@ public class NewsViewModel {
         this.title = title;
     }
 
-    public Image getCover() {
-        return cover;
+    public String getCoverURL() {
+        return coverURL;
     }
 
-    public void setCover(Image cover) {
-        this.cover = cover;
+    public void setCoverURL(String coverURL) {
+        this.coverURL = coverURL;
     }
 
-    public String getURL() {
-        return URL;
+    public String getNewsURL() {
+        return newsURL;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
+    public void setNewsURL(String newsURL) {
+        this.newsURL = newsURL;
     }
 }
