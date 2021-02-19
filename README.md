@@ -1,10 +1,10 @@
 # Citizens -- Non-Official Manchester City Football Club Android App for Chinese Fans
 
-## 1. Latest team news (from [zhibo8.cc](zhibo8.cc))
+## 1. Latest team news (from <a href="zhibo8.cc" target="_blank">zhibo8.cc</a>)
 
-## 2. Latest match schedules (from [zhibo8.cc](zhibo8.cc))
+## 2. Latest match schedules (from <a href="zhibo8.cc" target="_blank">zhibo8.cc</a>)
 
-## 3. team&player performance statistics (from [fbref.com](fbref.com))
+## 3. team&player performance statistics (from <a href="fbref.com" target="_blank">fbref.com</a>)
 
 ## 4. team information (working on...)
 
