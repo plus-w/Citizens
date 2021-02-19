@@ -1,7 +1,9 @@
 package com.example.citizens.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -26,7 +28,13 @@ import com.example.citizens.viewmodel.NewsViewModel;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,15 +102,32 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //        }
-        List<NewsViewModel> data = new ArrayList<NewsViewModel>();
-//        for (int i = 0; i < 10; i++) {
-//            NewsViewModel newsViewModel = new NewsViewModel("新闻-" + (10 - i), null, "www.bing.com");
-//            data.add(newsViewModel);
-//        }
-
-        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getContext(), data);
+        List<NewsViewModel> newsList = new ArrayList<NewsViewModel>();
+        newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getContext(), newsList);
         newsRecyclerViewAdapter.setClickListener(this);
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
+
+        SharedPreferences preferences = getActivity().getApplicationContext().getSharedPreferences("cache", Context.MODE_PRIVATE);
+        String newsJSONArrayString = preferences.getString("news_json_array", "");
+
+        if (!newsJSONArrayString.isEmpty()) {
+            try{
+                JSONArray newsJSONArray = new JSONArray(newsJSONArrayString);
+                for (int i = 0; i < newsJSONArray.length(); i++) {
+                    JSONObject object = (JSONObject) newsJSONArray.get(i);
+                    newsList.add(new NewsViewModel(
+                            object.getString("id"),
+                            object.getString("title"),
+                            object.getString("cover_img_url"),
+                            object.getString("mobile_url"),
+                            object.getString("date")));
+                }
+                newsRecyclerViewAdapter.updateNewsList(newsList);
+                newsRecyclerViewAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                Toast.makeText(getContext(), "数据预加载失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -114,14 +139,20 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
 //        mRecyclerView.setHasFixedSize(true);  // fix item size to improve performance
 
         swipeRefreshLayoutNews = (SwipyRefreshLayout) view.findViewById(R.id.swiperefresh_news);
-        swipeRefreshLayoutNews.setColorSchemeResources(R.color.blue, R.color.sky_blue);
+        swipeRefreshLayoutNews.setColorSchemeResources(R.color.blue, R.color.sky_blue, R.color.light_gold, R.color.red);
         swipeRefreshLayoutNews.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 swipeRefreshLayoutNews.setRefreshing(true);
                 String date = null;
-                if (direction == SwipyRefreshLayoutDirection.BOTTOM && newsRecyclerViewAdapter.getItemCount() > 0) {
-                    date = newsRecyclerViewAdapter.getItem(newsRecyclerViewAdapter.getItemCount() - 1).getDate();
+                if (direction == SwipyRefreshLayoutDirection.BOTTOM) {
+                    if (newsRecyclerViewAdapter.getItemCount() > 0) {
+                        date = newsRecyclerViewAdapter.getItem(newsRecyclerViewAdapter.getItemCount() - 1).getDate();
+                    } else {
+                        Date currentDate = new Date();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        date = dateFormat.format(currentDate);
+                    }
                 }
                 NetworkPort.getInstance().getNews(
                         getActivity().getApplicationContext(),
@@ -148,12 +179,15 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
         recyclerView.setAdapter(newsRecyclerViewAdapter);
 
+
+
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+//        Toast.makeText(getContext(), "onResume", Toast.LENGTH_SHORT).show();
     }
 
     @Override

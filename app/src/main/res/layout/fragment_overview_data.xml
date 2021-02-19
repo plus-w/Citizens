@@ -1,244 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.OverviewDataFragment">
 
-    <TextView
-        android:textSize="18sp"
-        android:id="@+id/season_name"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2020 - 2021 赛季" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view_epl"
-        android:clickable="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="10dp"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground">
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="18sp"
+            android:id="@+id/season_name"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2020 - 2021 赛季"
+            android:visibility="gone" />
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_epl"
+            android:clickable="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardElevation="1dp"
+            android:visibility="gone">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/epl"
-                android:textSize="18sp"
-                android:paddingVertical="5dp"/>
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:gravity="center"
-                android:layout_height="1px"
-                android:background="@color/sky_blue" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/epl"
+                    android:textSize="18sp"
+                    android:paddingVertical="5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:text="排名 1" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="1px"
+                    android:background="@color/sky_blue" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:text="胜-平-负 12-5-2" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="排名 1" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingVertical="5dp"
-                android:text="进球-失球 36-13" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="胜-平-负 12-5-2" />
 
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingVertical="5dp"
+                    android:text="进球-失球 36-13" />
+            </LinearLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view_ucl"
-        android:clickable="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground">
+        </androidx.cardview.widget.CardView>
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_ucl"
+            android:clickable="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="fill_horizontal"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardElevation="1dp"
+            android:visibility="gone">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/ucl"
-                android:textSize="18sp"
-                android:paddingVertical="5dp"/>
+                android:layout_gravity="fill_horizontal"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:gravity="center"
-                android:background="@color/sky_blue" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/ucl"
+                    android:textSize="18sp"
+                    android:paddingVertical="5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:text="晋级淘汰赛" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:gravity="center"
+                    android:background="@color/sky_blue" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="胜-平-负 5-1-0"
-                android:paddingTop="5dp"
-                android:visibility="gone"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:text="晋级淘汰赛" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="进球-失球 13-1"
-                android:paddingVertical="5dp"
-                android:visibility="gone"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="胜-平-负 5-1-0"
+                    android:paddingTop="5dp"
+                    android:visibility="gone"/>
 
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="进球-失球 13-1"
+                    android:paddingVertical="5dp"
+                    android:visibility="gone"/>
+            </LinearLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view_fa"
-        android:clickable="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground">
+        </androidx.cardview.widget.CardView>
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_fa"
+            android:clickable="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardElevation="1dp"
+            android:visibility="gone">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/fa"
-                android:textSize="18sp"
-                android:paddingVertical="5dp"/>
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:gravity="center"
-                android:background="@color/sky_blue" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/fa"
+                    android:textSize="18sp"
+                    android:paddingVertical="5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="晋级第5轮"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:gravity="center"
+                    android:background="@color/sky_blue" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:text="胜-平-负 12-5-2"
-                android:visibility="gone"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="晋级第5轮"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="进球-失球 36-13"
-                android:paddingVertical="5dp"
-                android:visibility="gone"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="胜-平-负 12-5-2"
+                    android:visibility="gone"/>
 
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="进球-失球 36-13"
+                    android:paddingVertical="5dp"
+                    android:visibility="gone"/>
+            </LinearLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view_efl"
-        android:clickable="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:foreground="?attr/selectableItemBackground">
+        </androidx.cardview.widget.CardView>
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_efl"
+            android:clickable="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardElevation="1dp"
+            android:visibility="gone">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/efl"
-                android:textSize="18sp"
-                android:paddingVertical="5dp"/>
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:gravity="center"
-                android:background="@color/sky_blue" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/efl"
+                    android:textSize="18sp"
+                    android:paddingVertical="5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="晋级决赛"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:gravity="center"
+                    android:background="@color/sky_blue" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="胜-平-负 12-5-2"
-                android:paddingTop="5dp"
-                android:visibility="gone"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="晋级决赛"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="进球-失球 36-13"
-                android:paddingVertical="5dp"
-                android:visibility="gone"/>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="胜-平-负 12-5-2"
+                    android:paddingTop="5dp"
+                    android:visibility="gone"/>
 
-    <com.bin.david.form.core.SmartTable
-        android:id="@+id/table_overview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="进球-失球 36-13"
+                    android:paddingVertical="5dp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-</LinearLayout>
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/table_overview_team"
+            android:layout_width="match_parent"
+            android:layout_height="480dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/myrect"
+            android:elevation="2dp"/>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

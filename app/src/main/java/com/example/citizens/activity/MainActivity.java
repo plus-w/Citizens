@@ -23,6 +23,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.citizens.R;
+import com.example.citizens.adapter.MatchRecyclerViewAdapter;
 import com.example.citizens.adapter.NewsRecyclerViewAdapter;
 import com.example.citizens.adapter.ViewPagerAdapter;
 import com.example.citizens.fragment.DataFragment;
@@ -110,52 +111,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
                 if (fragment instanceof NewsFragment) {
                     mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(true);
-
                     NewsRecyclerViewAdapter newsRecyclerViewAdapter = mNewsFragment.getNewsRecyclerViewAdapter();
                     NetworkPort.getInstance().getNews(getApplicationContext(), newsRecyclerViewAdapter, mNewsFragment.getSwipeRefreshLayoutNews(), null);
-
-//                    final Handler handler = new Handler();
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-////                          newsRecyclerViewAdapter.updateData(direction, getActivity().getApplicationContext());
-////                            if(swipeRefreshLayoutNews.isRefreshing()) {
-////                                swipeRefreshLayoutNews.setRefreshing(false);
-////                            }
-////                            .updateData(SwipyRefreshLayoutDirection.TOP, getApplicationContext());
-//                            if(mNewsFragment.getSwipeRefreshLayoutNews().isRefreshing()) {
-//                                mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(false);
-//                            }
-//                            newsRecyclerViewAdapter.notifyDataSetChanged();
-//                        }
-//                    }, 1000);
                     mNewsFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mNewsFragment.getRecyclerView(), null, 0);
                 } else if (fragment instanceof MatchFragment) {
                     mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(true);
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mMatchFragment.getMatchRecyclerViewAdapter().updateData(SwipyRefreshLayoutDirection.TOP);
-                            if( mMatchFragment.getSwipeRefreshLayoutMatch().isRefreshing()) {
-                                mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(false);
-                            }
-                        }
-                    }, 1000);
+                    MatchRecyclerViewAdapter matchRecyclerViewAdapter = mMatchFragment.getMatchRecyclerViewAdapter();
+                    NetworkPort.getInstance().getMatchSchedule(getApplicationContext(), matchRecyclerViewAdapter, mMatchFragment.getSwipeRefreshLayoutMatch(), "139");
                     mMatchFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mMatchFragment.getRecyclerView(), null, 0);
-                } else {
-//                    RotateAnimation rotateAnimation = new RotateAnimation(0, 360f,
-//                            Animation.RELATIVE_TO_SELF, 0.5f,
-//                            Animation.RELATIVE_TO_SELF, 0.5f);
-//                    rotateAnimation.setInterpolator(new LinearInterpolator());
-//                    rotateAnimation.setDuration(100);
-//                    rotateAnimation.setRepeatCount(3);
-//                    findViewById(R.id.fab_refresh).startAnimation(rotateAnimation);
+                } else  if (fragment instanceof DataFragment) {
+//                    mDataFragment.getSwipeRefreshLayoutData().setRefreshing(true);
+                    NetworkPort.getInstance().getStatistics(getApplicationContext(), mDataFragment);
                 }
-
             }
         });
+
         mViewPager.setAdapter(viewpagerAdapter);
     }
 
@@ -220,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 //                mFragmentManager.beginTransaction().hide(mActiveFragment).show(mDataFragment).commit();
 //                mActiveFragment = mDataFragment;
                 mViewPager.setCurrentItem(2, false);
+                if (!mDataFragment.isDataLoaded()) {
+                    mDataFragment.loadDataFromCache();
+                }
                 break;
             case R.id.action_info:
 //                        Toast.makeText(MainActivity.this, "资料", Toast.LENGTH_SHORT).show();

@@ -1,31 +1,129 @@
 package com.example.citizens.viewmodel;
 
 import android.media.Image;
+import android.nfc.FormatException;
+
+import androidx.annotation.Nullable;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MatchViewModel {
+    private String matchID;
+    private String matchLeague;
     private String matchType;
+    private String matchRound;
     private String matchDate;
     private String matchWeekDay;
     private String matchTime;
+
     private String homeTeamName;
     private String awayTeamName;
     private String homeTeamScore;
     private String awayTeamScore;
 
-    private Image matchTypeLogo = null;
-    private Image homeTeamLogo = null;
-    private Image awayTeamLogo = null;
+    private String homeTeamLogoURL;
+    private String awayTeamLogoURL;
 
-    public MatchViewModel(String matchType, String matchDate, String matchWeekDay, String matchTime,
-                          String homeTeamName, String awayTeamName, String homeTeamScore, String awayTeamScore) {
+    private String matchProgress;
+
+    public MatchViewModel(String matchID, String matchLeague, String matchType, String matchRound,
+                          String matchDate, String matchTime, String homeTeamName,
+                          String awayTeamName, String homeTeamScore, String awayTeamScore,
+                          String homeTeamLogoURL, String awayTeamLogoURL) {
+        this.matchID = matchID;
+        this.matchLeague = matchLeague;
         this.matchType = matchType;
+        this.matchRound = matchRound;
         this.matchDate = matchDate;
-        this.matchWeekDay = matchWeekDay;
         this.matchTime = matchTime;
         this.homeTeamName = homeTeamName;
         this.awayTeamName = awayTeamName;
-        this.homeTeamScore = homeTeamScore;
-        this.awayTeamScore = awayTeamScore;
+        this.homeTeamScore = homeTeamScore == null || homeTeamScore.equals("null") ? "" : homeTeamScore;
+        this.awayTeamScore = awayTeamScore == null || homeTeamScore.equals("null") ? "" : awayTeamScore;
+        this.homeTeamLogoURL = homeTeamLogoURL;
+        this.awayTeamLogoURL = awayTeamLogoURL;
+
+        // set match progress text
+        boolean isMatchTypeEmpty = matchType == null || matchType.equals("null") || matchType.isEmpty();
+        if (matchRound != null && !matchRound.equals("null") && !matchRound.isEmpty()) {
+            this.matchProgress = isMatchTypeEmpty ? "第" + matchRound + "轮" : matchType + "第" + matchRound + "轮";
+        } else {
+            this.matchProgress = isMatchTypeEmpty ? "" : matchType;
+        }
+
+        // set chinese date format text & chinese weekday format text
+        DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat outputFormat = new SimpleDateFormat("yyyy年MM月dd日");
+        try {
+            Date date = inputFormat.parse(matchDate);
+            this.matchDate = outputFormat.format(date);
+
+            String[] weeks = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"};
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            int week_index = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+            if (week_index < 0) {
+                week_index = 0;
+            }
+            this.matchWeekDay = weeks[week_index];
+        } catch (ParseException e) {
+            e.printStackTrace();
+            this.matchWeekDay = "";
+        } catch (Exception e) {
+            e.printStackTrace();
+            this.matchDate = matchDate;
+        }
+
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof MatchViewModel)) {
+            return false;
+        }
+        MatchViewModel rhs = (MatchViewModel) obj;
+        return this.getMatchID().equals(rhs.getMatchID());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getMatchID().hashCode();
+    }
+
+    public String getMatchRound() {
+        return matchRound;
+    }
+
+    public void setMatchRound(String matchRound) {
+        this.matchRound = matchRound;
+    }
+
+    public String getMatchProgress() {
+        return matchProgress;
+    }
+
+    public void setMatchProgress(String matchProgress) {
+        this.matchProgress = matchProgress;
+    }
+
+    public String getMatchLeague() {
+        return matchLeague;
+    }
+
+    public void setMatchLeague(String matchLeague) {
+        this.matchLeague = matchLeague;
+    }
+
+    public String getMatchID() {
+        return matchID;
+    }
+
+    public void setMatchID(String matchID) {
+        this.matchID = matchID;
     }
 
     public String getMatchType() {
@@ -76,28 +174,28 @@ public class MatchViewModel {
         this.awayTeamScore = awayTeamScore;
     }
 
-    public Image getMatchTypeLogo() {
-        return matchTypeLogo;
+    public String getMatchTypeLogo() {
+        return matchType;
     }
 
-    public void setMatchTypeLogo(Image matchTypeLogo) {
-        this.matchTypeLogo = matchTypeLogo;
+    public void setMatchTypeLogo(String matchTypeLogo) {
+        this.matchType = matchType;
     }
 
-    public Image getHomeTeamLogo() {
-        return homeTeamLogo;
+    public String getHomeTeamLogoURL() {
+        return homeTeamLogoURL;
     }
 
-    public void setHomeTeamLogo(Image homeTeamLogo) {
-        this.homeTeamLogo = homeTeamLogo;
+    public void setHomeTeamLogoURL(String homeTeamLogoURL) {
+        this.homeTeamLogoURL = homeTeamLogoURL;
     }
 
-    public Image getAwayTeamLogo() {
-        return awayTeamLogo;
+    public String getAwayTeamLogoURL() {
+        return awayTeamLogoURL;
     }
 
-    public void setAwayTeamLogo(Image awayTeamLogo) {
-        this.awayTeamLogo = awayTeamLogo;
+    public void setAwayTeamLogoURL(Image awayTeamLogo) {
+        this.awayTeamLogoURL = awayTeamLogoURL;
     }
 
     public String getHomeTeamName() {

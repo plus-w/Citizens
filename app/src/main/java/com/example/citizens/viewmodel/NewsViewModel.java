@@ -4,6 +4,9 @@ import android.media.Image;
 
 import androidx.annotation.Nullable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class NewsViewModel {
     private String index;
     private String title;
@@ -19,6 +22,24 @@ public class NewsViewModel {
         this.date = date;
     }
 
+    public NewsViewModel(JSONObject object) throws JSONException {
+        this.index = object.getString("id");
+        this.title = object.getString("title");
+        this.coverURL = object.getString("cover_img_url");
+        this.newsURL = object.getString("mobile_url");
+        this.date = object.getString("date");
+    }
+
+    public JSONObject toJSONObject() throws JSONException {
+        JSONObject object = new JSONObject();
+
+        object.put("id", this.index);
+        object.put("title", this.title);
+        object.put("cover_img_url", this.coverURL);
+        object.put("mobile_url", this.newsURL);
+        object.put("date", this.date);
+        return object;
+    }
 
     @Override
     public int hashCode() {

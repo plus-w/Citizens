@@ -25,18 +25,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/image_view_match_type"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+            <TextView
+                android:id="@+id/text_view_match_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="12dp"
-                android:padding="0dp"
-                android:src="@drawable/manchester_city_fc_badge" />
+                android:gravity="center"
+                android:text="2021年1月4日" />
 
             <TextView
-                android:id="@+id/text_view_match_type"
+                android:id="@+id/text_view_match_league"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -46,18 +46,19 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/text_view_match_date"
+                android:id="@+id/text_view_match_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="12dp"
-                android:text="2021年1月4日" />
+                android:gravity="center"
+                android:text="第38轮" />
         </RelativeLayout>
         <TextView
             android:id="@+id/text_view_match_inner_sep"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="1px"
             android:background="@color/sky_blue"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"/>
@@ -76,8 +77,8 @@
                 android:orientation="vertical">
                 <ImageView
                     android:id="@+id/image_view_home_team_logo"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
                     android:src="@drawable/manchester_city_fc_badge"
                     android:scaleX="0.8"
                     android:scaleY="0.8" />
@@ -85,11 +86,11 @@
                     android:id="@+id/text_view_home_team_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="切尔西"
+                    android:text="曼城"
                     android:textSize="12sp"
                     android:layout_gravity="center_horizontal"
                     android:layout_below="@id/image_view_home_team_logo"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="0dp"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -105,8 +106,8 @@
 
                 <ImageView
                     android:id="@+id/image_view_away_team_logo"
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
                     android:src="@drawable/manchester_city_fc_badge"
                     android:scaleX="0.8"
                     android:scaleY="0.8"/>
@@ -119,7 +120,7 @@
                     android:textSize="12sp"
                     android:layout_gravity="center_horizontal"
                     android:layout_below="@id/image_view_away_team_logo"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="0dp"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -159,11 +160,11 @@
                 android:id="@+id/text_view_match_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00:30"
+                android:text="03:00"
                 android:textSize="18sp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/score_sep"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="0dp"/>
 
             <TextView

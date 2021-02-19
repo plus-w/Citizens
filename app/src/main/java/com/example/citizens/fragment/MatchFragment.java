@@ -1,5 +1,7 @@
 package com.example.citizens.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,9 +18,14 @@ import android.widget.Toast;
 
 import com.example.citizens.R;
 import com.example.citizens.adapter.MatchRecyclerViewAdapter;
+import com.example.citizens.utils.NetworkPort;
 import com.example.citizens.viewmodel.MatchViewModel;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +78,37 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //        }
 
-        List<MatchViewModel> data = new ArrayList<MatchViewModel>();
+        List<MatchViewModel> matchList = new ArrayList<MatchViewModel>();
 
-        matchRecyclerViewAdapter = new MatchRecyclerViewAdapter(data);
+        matchRecyclerViewAdapter = new MatchRecyclerViewAdapter(getContext(), matchList);
         matchRecyclerViewAdapter.setClickListener(this);
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
+
+        SharedPreferences preferences = getActivity().getApplicationContext().getSharedPreferences("cache", Context.MODE_PRIVATE);
+        String matchJSONArrayString = preferences.getString("match_json_array", "");
+
+        if (!matchJSONArrayString.isEmpty()) {
+            try {
+                JSONArray matchJSONArray = new JSONArray(matchJSONArrayString);
+
+                for (int i = 0; i < matchJSONArray.length(); i++) {
+                    JSONObject object = (JSONObject) matchJSONArray.get(i);
+//                        MySingleton.getInstance(context).getImageLoader();
+                    matchList.add(new MatchViewModel(
+                            object.getString("match_id"),
+                            object.getString("league"),
+                            object.getString("type"), object.getString("round"),
+                            object.getString("date"), object.getString("time"),
+                            object.getString("home_name"), object.getString("away_name"),
+                            object.getString("home_score"), object.getString("away_score"),
+                            object.getString("home_logo_url"), object.getString("away_logo_url")));
+                }
+                matchRecyclerViewAdapter.updateMatchSchedule(matchList);
+                matchRecyclerViewAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                Toast.makeText(getContext(), "数据预加载失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
@@ -86,20 +119,16 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_match);
 
         swipeRefreshLayoutMatch = (SwipyRefreshLayout) view.findViewById(R.id.swiperefresh_match);
+        swipeRefreshLayoutMatch.setColorSchemeResources(R.color.blue, R.color.sky_blue, R.color.light_gold, R.color.red);
         swipeRefreshLayoutMatch.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 swipeRefreshLayoutMatch.setRefreshing(true);
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        matchRecyclerViewAdapter.updateData(direction);
-                        if(swipeRefreshLayoutMatch.isRefreshing()) {
-                            swipeRefreshLayoutMatch.setRefreshing(false);
-                        }
-                    }
-                }, 1000);
+                NetworkPort.getInstance().getMatchSchedule(
+                        getActivity().getApplicationContext(),
+                        matchRecyclerViewAdapter,
+                        swipeRefreshLayoutMatch,
+                        "139");
             }
         });
 

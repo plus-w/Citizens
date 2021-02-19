@@ -1,14 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.EPLDataFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/table_epl_team"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@drawable/myrect"
+            android:elevation="2dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+        <com.bin.david.form.core.SmartTable
+            android:id="@+id/table_epl_player"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:background="@drawable/myrect"
+            android:elevation="2dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintTop_toBottomOf="@id/table_epl_team" />
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -22,10 +22,10 @@ public class MyViewPager extends ViewPager {
 //        setPageTransformer(true, new DefaultTransformer());
     }
 
-    @Override
-    public boolean canScrollHorizontally(int direction) {
-        return false;
-    }
+//    @Override
+//    public boolean canScrollHorizontally(int direction) {
+//        return false;
+//    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent me) {

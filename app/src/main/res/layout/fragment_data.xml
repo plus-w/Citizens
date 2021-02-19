@@ -5,17 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".fragment.DataFragment">
 
     <RadioGroup
         android:id="@+id/radio_group_data"
-        android:layout_width="48dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
         android:background="@color/light_gold"
-        android:orientation="vertical"
-        android:weightSum="10"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/view_pager_data">
+        android:orientation="horizontal"
+        android:weightSum="5"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/view_pager_data">
 
         <RadioButton
             android:id="@+id/radio_button_overview"
@@ -31,7 +33,7 @@
             android:id="@+id/radio_button_epl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
             android:text="@string/radio_epl_data"
@@ -41,7 +43,7 @@
             android:id="@+id/radio_button_ucl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
             android:text="@string/radio_ucl_data"
@@ -51,7 +53,7 @@
             android:id="@+id/radio_button_fa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
             android:text="@string/radio_fa_data"
@@ -61,7 +63,7 @@
             android:id="@+id/radio_button_efl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:button="@null"
             android:gravity="center"
             android:text="@string/radio_efl_data"
@@ -77,4 +79,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toRightOf="@id/radio_group_data"
         app:layout_constraintRight_toRightOf="parent" />
+
 </LinearLayout>

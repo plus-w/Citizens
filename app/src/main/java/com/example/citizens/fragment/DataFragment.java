@@ -1,5 +1,7 @@
 package com.example.citizens.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,13 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.citizens.R;
 import com.example.citizens.adapter.ViewPagerAdapter;
 import com.example.citizens.utils.MyViewPager;
 
-import java.lang.reflect.Array;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +39,8 @@ public class DataFragment extends Fragment {
 
     private MyViewPager mViewPager;
     private RadioGroup mRadioGroup;
+//    private SwipyRefreshLayout mSwipyRefreshLayout;
+
     final private OverviewDataFragment mOverviewDataFragment = OverviewDataFragment.newInstance();
     final private EPLDataFragment mEPLDataFragment = EPLDataFragment.newInstance();
     final private UCLDataFragment mUCLDataFragment = UCLDataFragment.newInstance();
@@ -47,6 +53,8 @@ public class DataFragment extends Fragment {
     private RadioButton mUCLRadioButton;
     private RadioButton mFARadioButton;
     private RadioButton mEFLRadioButton;
+
+    private Boolean mDataLoaded = false;
 //
 //    private RadioButton mPrevRadioButton;
     Integer currentPosition = -1;
@@ -83,8 +91,6 @@ public class DataFragment extends Fragment {
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //        }
-
-
     }
 
     @Override
@@ -92,6 +98,16 @@ public class DataFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_data, container, false);
+
+//        mSwipyRefreshLayout = view.findViewById(R.id.swiperefresh_data);
+//        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+//                mSwipyRefreshLayout.setRefreshing(true);
+//                NetworkPort.getInstance().getStatistics(getActivity().getApplicationContext(), mSwipyRefreshLayout, DataFragment.this);
+//
+//            }
+//        });
 
         mOverviewRadioButton = (RadioButton) view.findViewById(R.id.radio_button_overview);
         mEPLRadioButton = (RadioButton) view.findViewById(R.id.radio_button_epl);
@@ -162,4 +178,55 @@ public class DataFragment extends Fragment {
         mViewPager.setAdapter(viewpagerAdapter);
         return view;
     }
+
+    public void loadDataFromCache() {
+        SharedPreferences preferences = getActivity().getApplicationContext().getSharedPreferences("cache", Context.MODE_PRIVATE);
+        String statisticsJSONObjectString = preferences.getString("statistics_json_object", "");
+        if (!statisticsJSONObjectString.isEmpty()) {
+            try {
+                this.updateStatisticsData(new JSONObject(statisticsJSONObjectString));
+                this.mDataLoaded = true;
+            } catch (JSONException e) {
+                Toast.makeText(getContext(), "数据预加载失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void updateStatisticsData(JSONObject statJSONObject) {
+        try {
+            JSONObject allJSONObject = statJSONObject.getJSONObject("all");
+            mOverviewDataFragment.setPlayerTableData(allJSONObject.getJSONArray("player"));
+
+            JSONObject eplJSONObject = statJSONObject.getJSONObject("epl");
+            mEPLDataFragment.setTeamTableData(eplJSONObject.getJSONArray("team"));
+            mEPLDataFragment.setPlayerTableData(eplJSONObject.getJSONArray("player"));
+
+            JSONObject uclJSONObject = statJSONObject.getJSONObject("ucl");
+            mUCLDataFragment.setTeamTableData(uclJSONObject.getJSONArray("team"));
+            mUCLDataFragment.setPlayerTableData(uclJSONObject.getJSONArray("player"));
+
+            JSONObject faJSONObject = statJSONObject.getJSONObject("fa");
+            mFADataFragment.setTeamStatTableData(faJSONObject.getJSONArray("team"));
+            mFADataFragment.setPlayerStatTableData(faJSONObject.getJSONArray("player"));
+
+            JSONObject eflJSONObject = statJSONObject.getJSONObject("efl");
+            mEFLDataFragment.setTeamStatTableData(eflJSONObject.getJSONArray("team"));
+            mEFLDataFragment.setPlayerStatTableData(eflJSONObject.getJSONArray("player"));
+        } catch (JSONException e) {
+            Toast.makeText(getContext(), "数据错误", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+//    public SwipyRefreshLayout getSwipeRefreshLayoutData() {
+//        return mSwipyRefreshLayout;
+//    }
+
+    public Boolean isDataLoaded() {
+        return mDataLoaded;
+    }
+
+    public void setDataLoadedFlag(Boolean mDataLoaded) {
+        this.mDataLoaded = mDataLoaded;
+    }
+
 }
