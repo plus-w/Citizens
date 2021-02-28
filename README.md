@@ -1,4 +1,4 @@
-## Citizens -- Non-Official Manchester City Football Club Android App for Chinese Fans
+## Citizens -- Non-Official Manchester City Football Club Chinese Android App for Fans
 
 ### 1. Latest team news (from zhibo8.cc)
 
