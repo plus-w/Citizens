@@ -8,3 +8,4 @@
 
 ## 4. team information (working on...)
 
+All features are improving, if you have questions for it, send e-mail to (wangjiahao111@qq.com), I will reply as soon as possible.

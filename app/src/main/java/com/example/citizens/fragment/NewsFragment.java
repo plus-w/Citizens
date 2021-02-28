@@ -1,27 +1,21 @@
 package com.example.citizens.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.citizens.R;
-import com.example.citizens.activity.NewsWebViewActivity;
+import com.example.citizens.activity.WebViewActivity;
 import com.example.citizens.adapter.NewsRecyclerViewAdapter;
 import com.example.citizens.utils.NetworkPort;
 import com.example.citizens.viewmodel.NewsViewModel;
@@ -192,7 +186,7 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent newsIntent = new Intent(getActivity(), NewsWebViewActivity.class);
+        Intent newsIntent = new Intent(getActivity(), WebViewActivity.class);
         newsIntent.putExtra("URL", newsRecyclerViewAdapter.getItem(position).getNewsURL());
         startActivity(newsIntent);
 //        Toast.makeText(getActivity(), newsRecyclerViewAdapter.getItem(position).getTitle() + " Clicked", Toast.LENGTH_SHORT).show();

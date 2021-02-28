@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="true"
         android:theme="@style/Theme.Citizens">
-        <activity android:name=".activity.NewsWebViewActivity"></activity>
+        <activity android:name=".activity.WebViewActivity"></activity>
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/Theme.Citizens.NoActionBar">

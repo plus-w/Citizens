@@ -1,5 +1,6 @@
 package com.example.citizens.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,9 +8,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.citizens.R;
+import com.example.citizens.activity.WebViewActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +62,15 @@ public class InfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_info, container, false);
+        RelativeLayout teamDetailLayout = (RelativeLayout) view.findViewById(R.id.relative_layout_team_detail);
+        teamDetailLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent teamDetailIntent = new Intent(getActivity(), WebViewActivity.class);
+                teamDetailIntent.putExtra("URL", "https://baike.baidu.com/item/%E6%9B%BC%E5%BD%BB%E6%96%AF%E7%89%B9%E5%9F%8E%E8%B6%B3%E7%90%83%E4%BF%B1%E4%B9%90%E9%83%A8");
+                startActivity(teamDetailIntent);
+            }
+        });
         return view;
     }
 }

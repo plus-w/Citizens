@@ -224,6 +224,7 @@ public class NetworkPort {
                     }
 
                     adapter.updateNewsList(newsList);
+                    adapter.notifyDataSetChanged();
 
                     //cache current news list
                     List<NewsViewModel> currentNewsList = adapter.getCurrentData();
@@ -236,7 +237,7 @@ public class NetworkPort {
                     editor.putString("news_json_array", currentJSONArray.toString());
                     editor.apply();
 
-                    adapter.notifyDataSetChanged();
+//                    adapter.notifyDataSetChanged();
 //                    Toast.makeText(context, response, Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();

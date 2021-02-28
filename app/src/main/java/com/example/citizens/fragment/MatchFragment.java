@@ -145,7 +145,7 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(getActivity(), "Item Clicked", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Item Clicked", Toast.LENGTH_SHORT).show();
     }
 
     public RecyclerView getRecyclerView() {
