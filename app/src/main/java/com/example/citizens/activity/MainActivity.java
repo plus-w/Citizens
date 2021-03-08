@@ -77,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 mBottomNavigationView.getMenu().getItem(position).setChecked(true);
                 currentPosition = position;
                 mPrevMenuItem = mBottomNavigationView.getMenu().getItem(position);
+                if (mBottomNavigationView.getMenu().getItem(position).getItemId() == R.id.action_data) {
+                    if (!mDataFragment.isDataLoaded()) {
+                        mDataFragment.loadDataFromCache();
+                    }
+                }
             }
 
             @Override
