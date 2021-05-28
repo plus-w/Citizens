@@ -19,7 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.citizens.R;
 import com.example.citizens.adapter.MatchRecyclerViewAdapter;
@@ -36,7 +35,6 @@ import com.example.citizens.utils.MyViewPager;
 import com.example.citizens.utils.NetworkPort;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 public class MainActivity extends AppCompatActivity
@@ -129,7 +127,7 @@ public class MainActivity extends AppCompatActivity
                     NewsRecyclerViewAdapter newsRecyclerViewAdapter = mNewsFragment.getNewsRecyclerViewAdapter();
                     NetworkPort.getInstance().getNews(getApplicationContext(), newsRecyclerViewAdapter, mNewsFragment.getSwipeRefreshLayoutNews(), null, mNewsFragment.getNewsLabelsRecyclerViewAdapter().getLabels());
                 } else if (fragment instanceof MatchFragment) {
-                    mMatchFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mMatchFragment.getRecyclerView(), null, 0);
+                    mMatchFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mMatchFragment.getMatchRecyclerView(), null, 0);
                     mMatchFragment.getSwipeRefreshLayoutMatch().setDirection(SwipyRefreshLayoutDirection.TOP);
                     mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(true);
                     MatchRecyclerViewAdapter matchRecyclerViewAdapter = mMatchFragment.getMatchRecyclerViewAdapter();
@@ -192,12 +190,18 @@ public class MainActivity extends AppCompatActivity
 //                mFragmentManager.beginTransaction().hide(mActiveFragment).show(mNewsFragment).commit();
 //                mActiveFragment = mNewsFragment;
 //                mViewPager
+                if (mViewPager.getCurrentItem() == 0) {
+                    mNewsFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mNewsFragment.getNewsRecyclerView(), null, 0);
+                }
                 mViewPager.setCurrentItem(0, false);
                 break;
             case R.id.action_match:
 //                        Toast.makeText(MainActivity.this, "赛况", Toast.LENGTH_SHORT).show();
 //                mFragmentManager.beginTransaction().hide(mActiveFragment).show(mMatchFragment).commit();
 //                mActiveFragment = mMatchFragment;
+                if (mViewPager.getCurrentItem() == 1) {
+                    mMatchFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mMatchFragment.getMatchRecyclerView(), null, 0);
+                }
                 mViewPager.setCurrentItem(1, false);
                 break;
             case R.id.action_data:
@@ -265,5 +269,10 @@ public class MainActivity extends AppCompatActivity
                 mNewsFragment.getNewsRecyclerViewAdapter(),
                 mNewsFragment.getSwipeRefreshLayoutNews(),
                 null, newsLabelsRecyclerViewAdapter.getLabels());
+    }
+
+    @Override
+    protected void onNightModeChanged(int mode) {
+        super.onNightModeChanged(mode);
     }
 }

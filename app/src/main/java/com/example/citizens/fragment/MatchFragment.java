@@ -8,13 +8,10 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.citizens.R;
@@ -47,7 +44,7 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
     // TODO: Rename and change types of parameters
 //    private String mParam1;
 
-    private RecyclerView recyclerView;
+    private RecyclerView matchRecyclerView;
     private MatchRecyclerViewAdapter matchRecyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
 //    private SwipeRefreshLayout  swipeRefreshLayoutMatch;
@@ -119,7 +116,7 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_match, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_match);
+        matchRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_match);
 
         swipeRefreshLayoutMatch = (SwipyRefreshLayout) view.findViewById(R.id.swiperefresh_match);
         swipeRefreshLayoutMatch.setColorSchemeResources(R.color.blue, R.color.sky_blue, R.color.light_gold, R.color.red);
@@ -135,8 +132,8 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
             }
         });
 
-        recyclerView.setLayoutManager(recyclerViewLayoutManager);
-        recyclerView.setAdapter(matchRecyclerViewAdapter);
+        matchRecyclerView.setLayoutManager(recyclerViewLayoutManager);
+        matchRecyclerView.setAdapter(matchRecyclerViewAdapter);
 
         return view;
     }
@@ -154,8 +151,8 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
         startActivity(matchIntent);
     }
 
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
+    public RecyclerView getMatchRecyclerView() {
+        return matchRecyclerView;
     }
 
     public MatchRecyclerViewAdapter getMatchRecyclerViewAdapter() {
