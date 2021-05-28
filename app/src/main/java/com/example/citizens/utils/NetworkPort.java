@@ -48,8 +48,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -142,7 +145,8 @@ public class NetworkPort {
                                 object.getString("date"), object.getString("time"),
                                 object.getString("home_name"), object.getString("away_name"),
                                 object.getString("home_score"), object.getString("away_score"),
-                                object.getString("home_logo_url"), object.getString("away_logo_url")));
+                                object.getString("home_logo_url"), object.getString("away_logo_url"),
+                                object.getString("match_live_url")));
                     }
 
                     SharedPreferences.Editor editor= context.getSharedPreferences("cache", Context.MODE_PRIVATE).edit();
@@ -176,7 +180,7 @@ public class NetworkPort {
         MySingleton.getInstance(context).addToRequestQueue(stringRequest);
     }
 
-    public void getNews(Context context, NewsRecyclerViewAdapter adapter, SwipyRefreshLayout swipyRefreshLayout, String date) {
+    public void getNews(Context context, NewsRecyclerViewAdapter adapter, SwipyRefreshLayout swipyRefreshLayout, String date, List<String> labels) {
         RequestQueue requestQueue = MySingleton.getInstance(context).getRequestQueue();
 
         Date currentDate = new Date();
@@ -195,7 +199,7 @@ public class NetworkPort {
         }
 //        Toast.makeText(context, dateString, Toast.LENGTH_SHORT).show();
         String url = "http://139.180.188.157:5000/news/" + dateString;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -223,7 +227,7 @@ public class NetworkPort {
                         }
                     }
 
-                    adapter.updateNewsList(newsList);
+                    adapter.updateNewsList(newsList, labels);
                     adapter.notifyDataSetChanged();
 
                     //cache current news list
@@ -258,7 +262,14 @@ public class NetworkPort {
                 }
                 Toast.makeText(context, "网络错误", Toast.LENGTH_LONG).show();
             }
-        });
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("labels", String.join(",", labels));
+                return params;
+            }
+        };
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(20*1000, 1, 1.0f));
         MySingleton.getInstance(context).addToRequestQueue(stringRequest);
     }

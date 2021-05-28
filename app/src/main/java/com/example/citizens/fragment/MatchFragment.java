@@ -1,6 +1,7 @@
 package com.example.citizens.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.citizens.R;
+import com.example.citizens.activity.WebViewActivity;
 import com.example.citizens.adapter.MatchRecyclerViewAdapter;
 import com.example.citizens.utils.NetworkPort;
 import com.example.citizens.viewmodel.MatchViewModel;
@@ -101,7 +103,8 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
                             object.getString("date"), object.getString("time"),
                             object.getString("home_name"), object.getString("away_name"),
                             object.getString("home_score"), object.getString("away_score"),
-                            object.getString("home_logo_url"), object.getString("away_logo_url")));
+                            object.getString("home_logo_url"), object.getString("away_logo_url"),
+                            object.getString("match_live_url")));
                 }
                 matchRecyclerViewAdapter.updateMatchSchedule(matchList);
                 matchRecyclerViewAdapter.notifyDataSetChanged();
@@ -146,6 +149,9 @@ public class MatchFragment extends Fragment implements MatchRecyclerViewAdapter.
     @Override
     public void onItemClick(View view, int position) {
 //        Toast.makeText(getActivity(), "Item Clicked", Toast.LENGTH_SHORT).show();
+        Intent matchIntent = new Intent(getActivity(), WebViewActivity.class);
+        matchIntent.putExtra("URL", matchRecyclerViewAdapter.getItem(position).getMatchLiveURL());
+        startActivity(matchIntent);
     }
 
     public RecyclerView getRecyclerView() {

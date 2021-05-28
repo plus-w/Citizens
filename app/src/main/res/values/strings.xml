@@ -19,4 +19,9 @@
     <string name="radio_ucl_data">欧冠</string>
     <string name="radio_fa_data">足总杯</string>
     <string name="radio_efl_data">联赛杯</string>
+    <string name="dialog_delete_label">是否删除该标签？</string>
+    <string name="delete">删除</string>
+    <string name="cancel">取消</string>
+    <string name="dialog_add_label">请输入要添加的标签</string>
+    <string name="add">添加</string>
 </resources>

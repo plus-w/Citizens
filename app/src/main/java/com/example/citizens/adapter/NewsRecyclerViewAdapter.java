@@ -53,11 +53,11 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
         return newsList;
     }
 
-    public void updateNewsList(List<NewsViewModel> list) {
+    public void updateNewsList(List<NewsViewModel> newsList, List<String> labelsList) {
         // merge and sort old list and new list by index;
         Set<NewsViewModel> set = new HashSet<NewsViewModel>();
+        set.addAll(this.newsList);
         set.addAll(newsList);
-        set.addAll(list);
 
 //        if (newsList.size() == 0 || list.size() == 0) {
 //            newsList.addAll(list);
@@ -67,15 +67,29 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
 //            }
 //        }
 
-        newsList.clear();
-        newsList.addAll(set);
-        Collections.sort(newsList, new Comparator<NewsViewModel>() {
+        this.newsList.clear();
+
+        for (NewsViewModel news : set) {
+            boolean containLabel = false;
+            String labels = news.getLabels();
+            for (String label : labelsList) {
+                if (labels.contains(label)) {
+                    containLabel = true;
+                    break;
+                }
+            }
+            if (containLabel) {
+                this.newsList.add(news);
+            }
+        }
+//        this.newsList.addAll(set);
+        Collections.sort(this.newsList, new Comparator<NewsViewModel>() {
             @Override
             public int compare(NewsViewModel o1, NewsViewModel o2) {
                 if (o1 == null || o2 == null) {
                     return 0;
                 }
-                return o2.getNewsURL().compareTo(o1.getNewsURL());
+                return o2.getUpdateTime().compareTo(o1.getUpdateTime());
             }
         });
     }
@@ -116,7 +130,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
     }
 
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onNewsItemClick(View view, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -143,7 +157,7 @@ public class NewsRecyclerViewAdapter extends RecyclerView.Adapter<NewsRecyclerVi
 
         @Override
         public void onClick(View view) {
-            if (clickListener != null) clickListener.onItemClick(view, getAdapterPosition());
+            if (clickListener != null) clickListener.onNewsItemClick(view, getAdapterPosition());
         }
     }
 }

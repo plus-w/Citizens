@@ -3,9 +3,9 @@ package com.example.citizens.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.MenuInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -24,18 +22,26 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.citizens.R;
 import com.example.citizens.adapter.MatchRecyclerViewAdapter;
+import com.example.citizens.adapter.NewsLabelsRecyclerViewAdapter;
 import com.example.citizens.adapter.NewsRecyclerViewAdapter;
 import com.example.citizens.adapter.ViewPagerAdapter;
+import com.example.citizens.fragment.AddLabelDialogFragment;
 import com.example.citizens.fragment.DataFragment;
+import com.example.citizens.fragment.DeleteLabelDialogFragment;
 import com.example.citizens.fragment.InfoFragment;
 import com.example.citizens.fragment.MatchFragment;
 import com.example.citizens.fragment.NewsFragment;
 import com.example.citizens.utils.NetworkPort;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements
+            BottomNavigationView.OnNavigationItemSelectedListener,
+            DeleteLabelDialogFragment.DeleteNewsLabelDialogListener,
+            AddLabelDialogFragment.AddNewsLabelDialogListener {
 
     final private FragmentManager mFragmentManager = getSupportFragmentManager();
     final private NewsFragment mNewsFragment = NewsFragment.newInstance();
@@ -115,15 +121,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Fragment fragment = viewpagerAdapter.getItem(mViewPager.getCurrentItem());
 
                 if (fragment instanceof NewsFragment) {
+                    mNewsFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mNewsFragment.getNewsRecyclerView(), null, 0);
+                    mNewsFragment.getSwipeRefreshLayoutNews().setDirection(SwipyRefreshLayoutDirection.TOP);
                     mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(true);
                     NewsRecyclerViewAdapter newsRecyclerViewAdapter = mNewsFragment.getNewsRecyclerViewAdapter();
-                    NetworkPort.getInstance().getNews(getApplicationContext(), newsRecyclerViewAdapter, mNewsFragment.getSwipeRefreshLayoutNews(), null);
-                    mNewsFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mNewsFragment.getRecyclerView(), null, 0);
+                    NetworkPort.getInstance().getNews(getApplicationContext(), newsRecyclerViewAdapter, mNewsFragment.getSwipeRefreshLayoutNews(), null, mNewsFragment.getNewsLabelsRecyclerViewAdapter().getLabels());
                 } else if (fragment instanceof MatchFragment) {
+                    mMatchFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mMatchFragment.getRecyclerView(), null, 0);
+                    mMatchFragment.getSwipeRefreshLayoutMatch().setDirection(SwipyRefreshLayoutDirection.TOP);
                     mMatchFragment.getSwipeRefreshLayoutMatch().setRefreshing(true);
                     MatchRecyclerViewAdapter matchRecyclerViewAdapter = mMatchFragment.getMatchRecyclerViewAdapter();
                     NetworkPort.getInstance().getMatchSchedule(getApplicationContext(), matchRecyclerViewAdapter, mMatchFragment.getSwipeRefreshLayoutMatch(), "139");
-                    mMatchFragment.getRecyclerViewLayoutManager().smoothScrollToPosition(mMatchFragment.getRecyclerView(), null, 0);
                 } else  if (fragment instanceof DataFragment) {
 //                    mDataFragment.getSwipeRefreshLayoutData().setRefreshing(true);
                     NetworkPort.getInstance().getStatistics(getApplicationContext(), mDataFragment);
@@ -215,4 +223,45 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 ////        Toast.makeText(MainActivity.this, "Back pressed", Toast.LENGTH_SHORT).show();
 ////        MainActivity.this.finish();
 //    }
+
+    @Override
+    public void onDeleteNewsLabelDialogCancelClick(DeleteLabelDialogFragment dialogFragment) {
+
+    }
+
+    @Override
+    public void onDeleteNewsLabelDialogConfirmClick(DeleteLabelDialogFragment dialogFragment) {
+        NewsLabelsRecyclerViewAdapter newsLabelsRecyclerViewAdapter = mNewsFragment.getNewsLabelsRecyclerViewAdapter();
+        newsLabelsRecyclerViewAdapter.removeLabel(dialogFragment.getDeleteLabelName());
+        newsLabelsRecyclerViewAdapter.notifyDataSetChanged();
+        mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(true);
+        NetworkPort.getInstance().getNews(
+                getApplicationContext(),
+                mNewsFragment.getNewsRecyclerViewAdapter(),
+                mNewsFragment.getSwipeRefreshLayoutNews(),
+                null, newsLabelsRecyclerViewAdapter.getLabels());
+    }
+
+    @Override
+    public void onAddNewsLabelDialogCancelClick(AddLabelDialogFragment dialogFragment) {
+
+    }
+
+    @Override
+    public void onAddNewsLabelDialogConfirmClick(AddLabelDialogFragment dialogFragment, String addLabelName) {
+        NewsLabelsRecyclerViewAdapter newsLabelsRecyclerViewAdapter = mNewsFragment.getNewsLabelsRecyclerViewAdapter();
+        newsLabelsRecyclerViewAdapter.addLabel(addLabelName);
+        newsLabelsRecyclerViewAdapter.notifyDataSetChanged();
+
+        SharedPreferences.Editor editor= this.getSharedPreferences("cache", Context.MODE_PRIVATE).edit();
+        editor.putString("news_labels", String.join(",", newsLabelsRecyclerViewAdapter.getLabels()));
+        editor.apply();
+
+        mNewsFragment.getSwipeRefreshLayoutNews().setRefreshing(true);
+        NetworkPort.getInstance().getNews(
+                getApplicationContext(),
+                mNewsFragment.getNewsRecyclerViewAdapter(),
+                mNewsFragment.getSwipeRefreshLayoutNews(),
+                null, newsLabelsRecyclerViewAdapter.getLabels());
+    }
 }

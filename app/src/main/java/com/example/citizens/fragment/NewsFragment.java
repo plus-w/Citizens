@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.citizens.R;
 import com.example.citizens.activity.WebViewActivity;
+import com.example.citizens.adapter.NewsLabelsRecyclerViewAdapter;
 import com.example.citizens.adapter.NewsRecyclerViewAdapter;
 import com.example.citizens.utils.NetworkPort;
 import com.example.citizens.viewmodel.NewsViewModel;
@@ -36,7 +38,13 @@ import java.util.List;
  * Use the {@link NewsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.ItemClickListener{
+public class NewsFragment
+        extends
+            Fragment
+        implements
+            NewsRecyclerViewAdapter.ItemClickListener,
+            NewsLabelsRecyclerViewAdapter.NewsLabelLongClickListener,
+            NewsLabelsRecyclerViewAdapter.NewsLabelClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,14 +52,22 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
 //    private static final String ARG_PARAM2 = "param2";
 //    private String mParam1;
 
-    private RecyclerView recyclerView;
+    private RecyclerView newsRecyclerView;
     private NewsRecyclerViewAdapter newsRecyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
 //    private SwipeRefreshLayout swipeRefreshLayoutNews;
     private SwipyRefreshLayout swipeRefreshLayoutNews;
 
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
+    private RecyclerView newsLabelsRecyclerView;
+    private NewsLabelsRecyclerViewAdapter newsLabelsRecyclerViewAdapter;
+    private RecyclerView.LayoutManager labelsRecyclerViewLayoutManager;
+
+    public NewsLabelsRecyclerViewAdapter getNewsLabelsRecyclerViewAdapter() {
+        return newsLabelsRecyclerViewAdapter;
+    }
+
+    public RecyclerView getNewsRecyclerView() {
+        return newsRecyclerView;
     }
 
     public NewsRecyclerViewAdapter getNewsRecyclerViewAdapter() {
@@ -96,13 +112,27 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
 //        if (getArguments() != null) {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //        }
+
         List<NewsViewModel> newsList = new ArrayList<NewsViewModel>();
         newsRecyclerViewAdapter = new NewsRecyclerViewAdapter(getContext(), newsList);
         newsRecyclerViewAdapter.setClickListener(this);
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
 
+        newsLabelsRecyclerViewAdapter = new NewsLabelsRecyclerViewAdapter(getContext());
+        newsLabelsRecyclerViewAdapter.setNewsLabelClickListener(this);
+        newsLabelsRecyclerViewAdapter.setNewsLabelLongClickListener(this);
+        labelsRecyclerViewLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+
         SharedPreferences preferences = getActivity().getApplicationContext().getSharedPreferences("cache", Context.MODE_PRIVATE);
         String newsJSONArrayString = preferences.getString("news_json_array", "");
+
+        String labelsString = preferences.getString("news_labels", "曼城");
+        String[] labels = labelsString.split(",");
+        for (String label : labels) {
+            newsLabelsRecyclerViewAdapter.addLabel(label);
+        }
+        newsLabelsRecyclerViewAdapter.addLabel("曼城");
+        newsLabelsRecyclerViewAdapter.addLabel("+");
 
         if (!newsJSONArrayString.isEmpty()) {
             try{
@@ -114,9 +144,12 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
                             object.getString("title"),
                             object.getString("cover_img_url"),
                             object.getString("mobile_url"),
-                            object.getString("date")));
+                            object.getString("date"),
+                            object.getString("news_create_time"),
+                            object.getString("news_update_time"),
+                            object.getString("labels")));
                 }
-                newsRecyclerViewAdapter.updateNewsList(newsList);
+                newsRecyclerViewAdapter.updateNewsList(newsList, newsLabelsRecyclerViewAdapter.getLabels());
                 newsRecyclerViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "数据预加载失败", Toast.LENGTH_SHORT).show();
@@ -129,7 +162,8 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_news);
+        newsRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_news);
+        newsLabelsRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_news_labels);
 //        mRecyclerView.setHasFixedSize(true);  // fix item size to improve performance
 
         swipeRefreshLayoutNews = (SwipyRefreshLayout) view.findViewById(R.id.swiperefresh_news);
@@ -152,7 +186,7 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
                         getActivity().getApplicationContext(),
                         newsRecyclerViewAdapter,
                         swipeRefreshLayoutNews,
-                        date);
+                        date, newsLabelsRecyclerViewAdapter.getLabels());
 
 //                final Handler handler = new Handler();
 //                handler.postDelayed(new Runnable() {
@@ -170,10 +204,11 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
             }
         });
 
-        recyclerView.setLayoutManager(recyclerViewLayoutManager);
-        recyclerView.setAdapter(newsRecyclerViewAdapter);
+        newsRecyclerView.setLayoutManager(recyclerViewLayoutManager);
+        newsRecyclerView.setAdapter(newsRecyclerViewAdapter);
 
-
+        newsLabelsRecyclerView.setLayoutManager(labelsRecyclerViewLayoutManager);
+        newsLabelsRecyclerView.setAdapter(newsLabelsRecyclerViewAdapter);
 
         return view;
     }
@@ -185,10 +220,30 @@ public class NewsFragment extends Fragment implements NewsRecyclerViewAdapter.It
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onNewsItemClick(View view, int position) {
         Intent newsIntent = new Intent(getActivity(), WebViewActivity.class);
         newsIntent.putExtra("URL", newsRecyclerViewAdapter.getItem(position).getNewsURL());
         startActivity(newsIntent);
 //        Toast.makeText(getActivity(), newsRecyclerViewAdapter.getItem(position).getTitle() + " Clicked", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onNewsLabelClick(View view, int position) {
+        String label = newsLabelsRecyclerViewAdapter.getItem(position);
+        if (label.equals("+")) {
+            AddLabelDialogFragment addLabelDialogFragment = new AddLabelDialogFragment();
+            addLabelDialogFragment.show(getFragmentManager(), null);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onNewsLabelLongClick(View view, int position) {
+        String labelName = newsLabelsRecyclerViewAdapter.getItem(position);
+        if (!labelName.equals("+")  && !labelName.equals("曼城")) {
+            DeleteLabelDialogFragment deleteLabelDialogFragment = new DeleteLabelDialogFragment(labelName);
+            deleteLabelDialogFragment.show(getFragmentManager(), null);
+        }
+        return true;
     }
 }

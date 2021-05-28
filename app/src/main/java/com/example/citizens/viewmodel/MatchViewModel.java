@@ -30,10 +30,12 @@ public class MatchViewModel {
 
     private String matchProgress;
 
+    private String matchLiveURL;
+
     public MatchViewModel(String matchID, String matchLeague, String matchType, String matchRound,
                           String matchDate, String matchTime, String homeTeamName,
                           String awayTeamName, String homeTeamScore, String awayTeamScore,
-                          String homeTeamLogoURL, String awayTeamLogoURL) {
+                          String homeTeamLogoURL, String awayTeamLogoURL, String matchLiveURL) {
         this.matchID = matchID;
         this.matchLeague = matchLeague;
         this.matchType = matchType;
@@ -46,6 +48,7 @@ public class MatchViewModel {
         this.awayTeamScore = awayTeamScore == null || homeTeamScore.equals("null") ? "" : awayTeamScore;
         this.homeTeamLogoURL = homeTeamLogoURL;
         this.awayTeamLogoURL = awayTeamLogoURL;
+        this.matchLiveURL = matchLiveURL;
 
         // set match progress text
         boolean isMatchTypeEmpty = matchType == null || matchType.equals("null") || matchType.isEmpty();
@@ -92,6 +95,14 @@ public class MatchViewModel {
     @Override
     public int hashCode() {
         return this.getMatchID().hashCode();
+    }
+
+    public String getMatchLiveURL() {
+        return matchLiveURL;
+    }
+
+    public void setMatchLiveURL(String newURL) {
+        this.matchLiveURL = newURL;
     }
 
     public String getMatchRound() {
