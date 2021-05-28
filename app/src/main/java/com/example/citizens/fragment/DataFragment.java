@@ -18,11 +18,16 @@ import android.widget.Toast;
 import com.example.citizens.R;
 import com.example.citizens.adapter.ViewPagerAdapter;
 import com.example.citizens.utils.MyViewPager;
+import com.example.citizens.utils.NetworkPort;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout;
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +41,12 @@ public class DataFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
 //    private static final String ARG_PARAM2 = "param2";
+
+    public SwipyRefreshLayout getSwipeRefreshLayoutData() {
+        return swipeRefreshLayoutData;
+    }
+
+    private SwipyRefreshLayout swipeRefreshLayoutData;
 
     private MyViewPager mViewPager;
     private RadioGroup mRadioGroup;
@@ -108,6 +119,11 @@ public class DataFragment extends Fragment {
 //
 //            }
 //        });
+        DataFragment currentInstance = this;
+        swipeRefreshLayoutData = (SwipyRefreshLayout) view.findViewById(R.id.swiperefresh_data);
+        swipeRefreshLayoutData.setColorSchemeResources(R.color.blue, R.color.sky_blue, R.color.light_gold, R.color.red);
+        swipeRefreshLayoutData.setOnRefreshListener(null);
+        swipeRefreshLayoutData.setEnabled(false);
 
         mOverviewRadioButton = (RadioButton) view.findViewById(R.id.radio_button_overview);
         mEPLRadioButton = (RadioButton) view.findViewById(R.id.radio_button_epl);

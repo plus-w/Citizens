@@ -81,7 +81,7 @@ public class NetworkPort {
         this.handler = handler;
     }
 
-    public void getStatistics(Context context, DataFragment dataFragment) {
+    public void getStatistics(Context context, DataFragment dataFragment, SwipyRefreshLayout swipyRefreshLayout) {
         RequestQueue requestQueue = MySingleton.getInstance(context).getRequestQueue();
         String url = "http://" + serverIP + ":" + appPort + "/statistics";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -102,10 +102,10 @@ public class NetworkPort {
                     e.printStackTrace();
                     Toast.makeText(context, "网络数据错误", Toast.LENGTH_SHORT).show();
                 } finally {
-//                    if(swipyRefreshLayout.isRefreshing()) {
-//                        swipyRefreshLayout.setRefreshing(false);
-//                    }
-//                    Toast.makeText(context, "数据已更新", Toast.LENGTH_SHORT).show();
+                    if(swipyRefreshLayout.isRefreshing()) {
+                        swipyRefreshLayout.setRefreshing(false);
+                    }
+                    Toast.makeText(context, "数据已更新", Toast.LENGTH_SHORT).show();
                 }
             }
         }, new Response.ErrorListener(){

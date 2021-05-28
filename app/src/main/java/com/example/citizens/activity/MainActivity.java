@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.citizens.R;
 import com.example.citizens.adapter.MatchRecyclerViewAdapter;
@@ -31,6 +32,7 @@ import com.example.citizens.fragment.DeleteLabelDialogFragment;
 import com.example.citizens.fragment.InfoFragment;
 import com.example.citizens.fragment.MatchFragment;
 import com.example.citizens.fragment.NewsFragment;
+import com.example.citizens.utils.MyViewPager;
 import com.example.citizens.utils.NetworkPort;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity
 
     private FloatingActionButton mFAB;
     private BottomNavigationView mBottomNavigationView;
-    private ViewPager mViewPager;
+    private MyViewPager mViewPager;
 
     MenuItem mPrevMenuItem;
     Integer currentPosition = -1;
@@ -133,8 +135,8 @@ public class MainActivity extends AppCompatActivity
                     MatchRecyclerViewAdapter matchRecyclerViewAdapter = mMatchFragment.getMatchRecyclerViewAdapter();
                     NetworkPort.getInstance().getMatchSchedule(getApplicationContext(), matchRecyclerViewAdapter, mMatchFragment.getSwipeRefreshLayoutMatch(), "139");
                 } else  if (fragment instanceof DataFragment) {
-//                    mDataFragment.getSwipeRefreshLayoutData().setRefreshing(true);
-                    NetworkPort.getInstance().getStatistics(getApplicationContext(), mDataFragment);
+                    mDataFragment.getSwipeRefreshLayoutData().setRefreshing(true);
+                    NetworkPort.getInstance().getStatistics(getApplicationContext(), mDataFragment, mDataFragment.getSwipeRefreshLayoutData());
                 }
             }
         });
